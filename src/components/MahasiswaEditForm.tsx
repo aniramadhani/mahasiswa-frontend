@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { updateMahasiswa } from '../api/mahasiswa';
+import { useDispatch } from 'react-redux';
 import type { Mahasiswa } from '../api/mahasiswa';
+import { updateMahasiswa as updateMahasiswaAction } from '../redux/mahasiswa/mahasiswaSlice';
 
 interface MahasiswaEditFormProps {
   mahasiswa: Mahasiswa;
@@ -9,24 +10,29 @@ interface MahasiswaEditFormProps {
 }
 
 const MahasiswaEditForm: React.FC<MahasiswaEditFormProps> = ({ mahasiswa, onUpdated, onCancel }) => {
+  const dispatch = useDispatch();
+
   const [nama, setNama] = useState(mahasiswa.nama);
   const [nim, setNim] = useState(mahasiswa.nim);
   const [jurusan, setJurusan] = useState(mahasiswa.jurusan);
   const [tanggalLahir, setTanggalLahir] = useState(mahasiswa.tanggal_lahir);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await updateMahasiswa(mahasiswa.id, {
-        nama,
-        nim,
-        jurusan,
-        tanggal_lahir: tanggalLahir,
-      });
-      onUpdated();
-    } catch (error) {
-      console.error(error);
-    }
+
+    dispatch(
+      updateMahasiswaAction({
+        id: mahasiswa.id,
+        data: {
+          nama,
+          nim,
+          jurusan,
+          tanggal_lahir: tanggalLahir,
+        },
+      })
+    );
+
+    onUpdated(); // bisa kasih loading atau callback setelah update selesai
   };
 
   return (
