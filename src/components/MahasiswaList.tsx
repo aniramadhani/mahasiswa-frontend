@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import type { RootState } from '../redux/store';
 import {
   fetchMahasiswa,
   deleteMahasiswa as deleteMahasiswaAction,
@@ -36,7 +36,7 @@ const MahasiswaList: React.FC = () => {
         {mahasiswa.length === 0 ? (
           <p className="empty">Belum ada mahasiswa.</p>
         ) : (
-          mahasiswa.map((mhs) => (
+          mahasiswa.map((mhs: Mahasiswa) => (
             <div key={mhs.id} className="card">
               <div style={{ flex: 1 }}>
                 {editId === mhs.id ? (

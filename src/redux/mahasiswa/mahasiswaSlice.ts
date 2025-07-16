@@ -1,12 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface Mahasiswa {
-  id: number;
-  nama: string;
-  nim: string;
-  jurusan: string;
-  tanggal_lahir: string;
-}
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { Mahasiswa } from '../../api/mahasiswa';
 
 interface MahasiswaState {
   data: Mahasiswa[];
@@ -24,6 +18,7 @@ const mahasiswaSlice = createSlice({
   name: 'mahasiswa',
   initialState,
   reducers: {
+    // Ambil data
     fetchMahasiswa: (state) => {
       state.loading = true;
       state.error = null;
@@ -36,8 +31,17 @@ const mahasiswaSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+
+    // Tambah data (di-handle oleh saga)
     tambahMahasiswa: (_state, _action: PayloadAction<Omit<Mahasiswa, 'id'>>) => {},
-    updateMahasiswa: (_state, _action: PayloadAction<{ id: number; data: Omit<Mahasiswa, 'id'> }>) => {},
+
+    // Update data (untuk saga)
+    updateMahasiswa: (
+      _state,
+      _action: PayloadAction<{ id: number; data: Omit<Mahasiswa, 'id'> }>
+    ) => {},
+
+    // Delete data (untuk saga)
     deleteMahasiswa: (_state, _action: PayloadAction<number>) => {},
   },
 });
